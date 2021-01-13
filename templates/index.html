@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+{% if current_user.is_authenticated %}
+    Logged in as {{ current_user.email }} <br />
+    <a href="{{ url_for("logout") }}">Log out</a><br />
+    <a href="{{ url_for("tokens") }}">Tokens</a><br />
+{% else %}
+    <a href="{{ url_for("register") }}">Register</a>
+    or
+    <a href="{{ url_for("login") }}">Instructor log in</a><br />
+{% endif %}
+<br />
+<br />
+<a>Go to table of contents</a>
+</body>
+</html>
