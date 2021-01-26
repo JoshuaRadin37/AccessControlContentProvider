@@ -8,14 +8,15 @@
 {% if current_user.is_authenticated %}
     Logged in as {{ current_user.email }} <br />
     <a href="{{ url_for("user_management.logout") }}">Log out</a><br />
-    <a href="{{ url_for("user_management.tokens") }}">Tokens</a><br />
+    <a href="{{ url_for("user_management.profile") }}">Profile</a><br />
 {% else %}
     <a href="{{ url_for("user_management.register") }}">Register</a>
     or
     <a href="{{ url_for("user_management.login") }}">Instructor log in</a><br />
+    <a href="{{ url_for("reset_database") }}">Reset Database</a><br />
 {% endif %}
 <br />
 <br />
-<a>Go to table of contents</a>
+<a href="{{ url_for("table_of_contents") }}">Go to table of contents</a>
 </body>
 </html>

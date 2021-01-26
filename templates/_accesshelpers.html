@@ -1,0 +1,6 @@
+{% macro protected(path) %}
+    {{ url_for('protected') }}?path={{path}}
+{% endmacro %}
+{% macro content(path) %}
+    {{ url_for('get_content') }}?path={{path}}
+{% endmacro %}

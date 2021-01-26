@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<a href="{{ url_for("index") }}">Home</a>
+<h3>
+    Active Tokens
+</h3>
+
+<div id="active_token_list">
+
+    {% if active_tokens|length > 0 %}
+        <ul>
+            {% for token in active_tokens %}
+                <li>
+                    <div style="color: green">
+                    {{ token.code }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        No active tokens <br />
+    {% endif %}
+
+</div>
+<h3>
+    Inactive Tokens
+</h3>
+
+<div id="inactive_token_list">
+
+    {% if inactive_tokens|length > 0 %}
+        <ul>
+            {% for token in inactive_tokens %}
+                <li>
+                {% if token.is_expired %}
+                    <div style="color: red">
+                        EXPIRED {{ token.code }}
+                    </div>
+                {% else %}
+                    <div style="color: yellow">
+                        Inactive {{ token.code }}
+                    </div>
+                {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        No inactive tokens <br />
+    {% endif %}
+
+</div>
+
+<h3>
+    Create new token
+</h3>
+{% from "_formhelpers.html" import render_field %}
+{% if current_user.is_active %}
+    <form method="post">
+        <dl>
+            {{ form.csrf_token }}
+            {# {{ render_field(form.start_time) }} #}
+            <label for="start">Start Date </label>
+            <input type="date" id="start" name="start_time">
+            <br />
+            <label for="end">End Date </label>
+            <input type="date" id="end" name="end_time"><br />
+            {# {{ render_field(form.end_time) }} #}
+            {{ render_field(form.valid_domain) }}
+            {{ render_field(form.submit) }}
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div style="color: red">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </dl>
+    </form>
+{% else %}
+    Must confirm account before you can create tokens
+{% endif %}
+</body>
+</html>
