@@ -5,14 +5,14 @@
     <title>Example Content</title>
 </head>
 <body>
-{% from "_accesshelpers.html" import protected, content %}
+{% from "_accesshelpers.html" import protected %}
 <h1>This is an example of some content</h1>
 <p>
     Let's look at some example content. Here is some great example content. But what if we wanted
     even more example content? Well look no further than this protected <a href="{{ protected("examples/example_content2.html") }}">link!</a>
 </p>
 <p>
-    But if you want to see some unprotected content, look <a href="{{ content("examples/example_content3.html") }}">here</a>
+    But if you want to see some unprotected content, look <a href="{{ protected("examples/example_content3.html") }}">here</a>
 </p>
 </body>
 </html>

@@ -1,9 +1,17 @@
-from flask_login import current_user
+"""
+Contains all of the forms used by the application
+"""
+
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators, SubmitField, DateTimeField, DateField
+from wtforms import StringField, PasswordField, validators, SubmitField, DateField
 
 
 class NewInstructorForm(FlaskForm):
+    """
+    The instructor registration form.
+
+    The Email must be unique.
+    """
     first_name = StringField("First Name *", [validators.DataRequired()])
     last_name = StringField("Last Name *", [validators.DataRequired()])
     email = StringField("Email *", [validators.DataRequired(), validators.Email()])
@@ -20,6 +28,9 @@ class NewInstructorForm(FlaskForm):
 
 
 class NewTokenForm(FlaskForm):
+    """
+    The new token form
+    """
     start_time = DateField("Start Date", [validators.DataRequired()])
     end_time = DateField("End Date", [validators.DataRequired()])
     valid_domain = StringField("Valid Domain", [validators.DataRequired()])
@@ -27,6 +38,9 @@ class NewTokenForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
+    """
+    The instructor login form
+    """
     email = StringField("Email", [validators.DataRequired(), validators.Email()])
     password = PasswordField("Password *", [
         validators.DataRequired(),
@@ -36,6 +50,9 @@ class LoginForm(FlaskForm):
 
 
 class GetAccessForm(FlaskForm):
+    """
+    The form that must be completed to gain access to protected areas
+    """
     email = StringField("Email", [validators.DataRequired(), validators.Email()])
     access_code = StringField("Access Code",  [validators.DataRequired()])
     submit = SubmitField("Log in")

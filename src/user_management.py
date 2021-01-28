@@ -14,19 +14,31 @@ user_management = Blueprint('user_management', __name__, template_folder='../tem
 
 
 def initiate_user_functionality(app):
-    app.logger.info('initializing user management')
+    """
+    Initializes the user routes
+    :param app: The flask application
+    """
     app.register_blueprint(user_management)
 
 
 @user_management.route('/logout', methods=["GET", "POST"])
 @login_required
 def logout():
+    """
+    Logs out the user.
+    Must be logged in to access this page, enforced by flask-login.
+    :return: A redirect back to the index page
+    """
     logout_user()
     return redirect(url_for("index"))
 
 
 @user_management.route('/login', methods=["GET", "POST"])
 def login():
+    """
+    The login page
+    :return: A HTTPS request
+    """
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -48,7 +60,6 @@ def login():
                 print("Not a valid login")
                 flash("Email or password is invalid")
     else:
-        flash("form invalid")
         for error in form.errors:
             flash(error)
     return render_template("login.html", form=form)
@@ -56,6 +67,10 @@ def login():
 
 @user_management.route('/register', methods=["GET", "POST"])
 def register():
+    """
+    The user registration page
+    :return: A HTTPS request
+    """
     form = NewInstructorForm(request.form)
     if form.validate_on_submit():
         first_name = form.first_name.data
@@ -75,9 +90,8 @@ def register():
         else:
             flash("User with this email already exists")
     else:
-        flash("form invalid")
-    for error in form.errors:
-        flash(error)
+        for error in form.errors:
+            flash(error)
 
     return render_template("register.html", form=form)
 
@@ -85,6 +99,10 @@ def register():
 @user_management.route('/tokens', methods=["GET", "POST"])
 @login_required
 def profile():
+    """
+    The page where instructors can see their profile
+    :return: A HTTPS request
+    """
     tokens = AccessToken.query.filter(AccessToken.is_valid).all()
     if tokens is None:
         return flask.abort(400)
@@ -97,7 +115,6 @@ def profile():
         code = generate_token(current_app, current_user.get_id(), valid_domain, start_time, end_time)
         return redirect(url_for('user_management.profile'))
     else:
-        flash("form invalid")
         for error in form.errors:
             flash(error)
 
@@ -106,6 +123,10 @@ def profile():
 
 @user_management.route('/student_login', methods=["GET", "POST"])
 def student_login():
+    """
+    The page where students must input their access codes
+    :return: A HTTPS request
+    """
     access_code = request.cookies.get('code')
     email = request.cookies.get('email')
 
@@ -124,8 +145,8 @@ def student_login():
             resp = make_response(redirect(last_page or url_for("table_of_contents")))
             #expire_date = datetime.datetime.now()
             #expire_date = expire_date + datetime.timedelta(hours=1)
-            resp.set_cookie('code', code, max_age=60)
-            resp.set_cookie('email', email, max_age=60)
+            resp.set_cookie('code', code, max_age=60 * 60 * 3)
+            resp.set_cookie('email', email, max_age=60 * 60 * 3)
 
             return resp
         else:

@@ -6,6 +6,10 @@ db = SQLAlchemy()
 
 
 def initialize_db(app):
+    """
+    Initializes the database if doesn't already exist. Creates any non existent tables
+    :param app: The flask application
+    """
     global db
     db.init_app(app)
     with app.app_context():
@@ -13,6 +17,10 @@ def initialize_db(app):
 
 
 def reset_database(app):
+    """
+    Resets the database by dropping all tables and then recreating them
+    :param app: The flask application
+    """
     global db
     with app.app_context():
         db.drop_all()
@@ -42,8 +50,16 @@ def __generate_access_code():
     return code
 
 
-# Generates an access control token, and returns the string
 def generate_token(app, owner_id, valid_domain, expiration_date, start_date=None):
+    """
+    Generates an access control token, and returns the string
+    :param app: The flask application
+    :param owner_id: the owner id
+    :param valid_domain: the domain being used for the token
+    :param expiration_date: the date when the token should expire
+    :param start_date: the date when the token should start being valid
+    :return: the access code that was created
+    """
     from models import AccessToken
     with app.app_context():
         while True:
@@ -60,8 +76,12 @@ def generate_token(app, owner_id, valid_domain, expiration_date, start_date=None
         return access_code
 
 
-# Checks if the access code is valid by checking it's checksum
 def check_checksum(code: str) -> bool:
+    """
+    Checks whether a code has a valid checksum
+    :param code: the access code
+    :return: true or false
+    """
     checksum = 0
     print("checking", code)
     for i in range(0, token_length):

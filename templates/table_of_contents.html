@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Table of Contents</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='table_of_contents.css') }}">
 </head>
 <body>
 {% from "_accesshelpers.html" import protected, content %}
 <h3>Table of Contents</h3>
 <ol>
-    <li><a href="{{ content('examples/example_content.html') }}">Content 1</a></li>
+    <li><a href="{{ protected('examples/example_content.html') }}">Content 1</a></li>
     <li><a href="{{ protected('examples/example_content2.html') }}">Content 2</a></li>
-    <li><a href="{{ content('examples/example_content3.html') }}">Content 3</a></li>
+    <li><a href="{{ protected('examples/example_content3.html') }}">Content 3</a></li>
 </ol>
 </body>
 </html>
